@@ -4,7 +4,7 @@
 import * as vscode from 'vscode';
 
 function lookupSymbol(symbol: string) {
- return <Promise<vscode.SymbolInformation[]>> 
+    return <Promise<vscode.SymbolInformation[]>>
         vscode.commands.executeCommand('vscode.executeWorkspaceSymbolProvider', symbol);
 }
 
@@ -34,20 +34,27 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        let syms = await lookupSymbol(text);
+        try {
+            let syms = await lookupSymbol(text);
 
-        // This is called if the symbol is found
-        console.log('lookupSymbol ' + text + " OK!");
-        syms.forEach ((sym) => {
-            console.log("symbol name=" + sym.name);
-            console.log("symbol containerName=" + sym.containerName);
-            console.log("symbol kind=" + sym.kind);
-            console.log("symbol path=" + vscode.workspace.asRelativePath(sym.location.uri.fsPath, true));
-            console.log("symbol line=(" + sym.location.range.start.line + "," + sym.location.range.end.line + ")");
-            vscode.window.showInformationMessage("CodeGraph file " + vscode.workspace.asRelativePath(sym.location.uri.fsPath, true) +  
-                                                 " line " + sym.location.range.start.line);
-        });
-        
+            syms = syms.filter((s: vscode.SymbolInformation) =>
+                s.kind !== vscode.SymbolKind.Namespace);
+
+            // This is called if the symbol is found
+            console.log('lookupSymbol ' + text + " OK!");
+            syms.forEach((sym) => {
+                console.log("symbol name=" + sym.name);
+                console.log("symbol containerName=" + sym.containerName);
+                console.log("symbol kind=" + sym.kind);
+                console.log("symbol path=" + vscode.workspace.asRelativePath(sym.location.uri.fsPath, true));
+                console.log("symbol line=(" + sym.location.range.start.line + "," + sym.location.range.end.line + ")");
+                vscode.window.showInformationMessage("CodeGraph file " + vscode.workspace.asRelativePath(sym.location.uri.fsPath, true) +
+                    " line " + sym.location.range.start.line);
+            });
+        } catch (err) {
+            console.log("lookupSymbol error " + err);
+        }
+
     });
 
     context.subscriptions.push(disposable);
