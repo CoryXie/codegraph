@@ -22,19 +22,19 @@ export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('codegraph.AddGraphElement', async () => {
         // The code you place here will be executed every time your command is executed
 
-        var editor = vscode.window.activeTextEditor;
+        let editor = vscode.window.activeTextEditor;
         if (!editor) {
             return;
         }
 
-        var selection = editor.selection;
-        var text = editor.document.getText(selection);
+        let selection = editor.selection;
+        let text = editor.document.getText(selection);
 
         if (!text) {
             return;
         }
 
-        const syms = await lookupSymbol(text);
+        let syms = await lookupSymbol(text);
 
         // This is called if the symbol is found
         console.log('lookupSymbol ' + text + " OK!");

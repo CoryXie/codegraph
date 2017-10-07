@@ -15,16 +15,25 @@
     ],
     "main": "./out/extension",
     "contributes": {
-        "commands": [{
-            "command": "codegraph.AddGraphElement",
-            "title": "Add Code Graph Element"
-        }],
-        "keybindings":[
+        "commands": [
+            {
+                "command": "codegraph.AddGraphElement",
+                "title": "Add Code Graph Element"
+            }
+        ],
+        "keybindings": [
             {
                 "command": "codegraph.AddGraphElement",
                 "key": "ctrl+alt+g"
             }
-        ]
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "codegraph.AddGraphElement"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
